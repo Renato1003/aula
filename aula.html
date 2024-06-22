@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Aluguel de Video Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"], input[type="reset"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        input[type="submit"]:hover, input[type="reset"]:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1> Aluguel de Video Games</h1>
+
+    <form id="aluguelForm">
+        <h2>Adicionar Aluguel</h2>
+        <label for="cliente">Cliente:</label>
+        <input type="text" id="cliente" name="cliente" required>
+
+        <label for="jogo">Jogo:</label>
+        <input type="text" id="jogo" name="jogo" required>
+
+        <label for="dataAluguel">Data de Aluguel:</label>
+        <input type="date" id="dataAluguel" name="dataAluguel" required>
+
+        <label for="preco">Preço:</label>
+        <input type="number" id="preco" name="preco" min="0" step="0.01" required>
+
+        <input type="submit" value="Adicionar">
+        <input type="reset" value="Limpar">
+    </form>
+
+    <h2>Lista de Aluguéis</h2>
+    <table id="aluguelTable">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Jogo</th>
+                <th>Data de Aluguel</th>
+                <th>Preço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aqui serão adicionadas as linhas dinamicamente com JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // Função para adicionar um aluguel na tabela
+        function adicionarAluguel() {
+            var cliente = document.getElementById("cliente").value;
+            var jogo = document.getElementById("jogo").value;
+            var dataAluguel = document.getElementById("dataAluguel").value;
+            var preco = parseFloat(document.getElementById("preco").value).toFixed(2);
+
+            var table = document.getElementById("aluguelTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow(table.rows.length);
+            var cellCliente = newRow.insertCell(0);
+            var cellJogo = newRow.insertCell(1);
+            var cellData = newRow.insertCell(2);
+            var cellPreco = newRow.insertCell(3);
+            var cellAcoes = newRow.insertCell(4);
+
+            cellCliente.innerHTML = cliente;
+            cellJogo.innerHTML = jogo;
+            cellData.innerHTML = dataAluguel;
+            cellPreco.innerHTML = "R$ " + preco;
+            cellAcoes.innerHTML = '<button onclick="editarAluguel(this)">Editar</button> <button onclick="excluirAluguel(this)">Excluir</button>';
+        }
+
+        // Função para editar um aluguel
+        function editarAluguel(row) {
+            var currentRow = row.parentNode.parentNode;
+            var cliente = currentRow.cells[0].innerHTML;
+            var jogo = currentRow.cells[1].innerHTML;
+            var dataAluguel = currentRow.cells[2].innerHTML;
+            var preco = currentRow.cells[3].innerHTML.replace('R$ ', '');
+
+            document.getElementById("cliente").value = cliente;
+            document.getElementById("jogo").value = jogo;
+            document.getElementById("dataAluguel").value = dataAluguel;
+            document.getElementById("preco").value = parseFloat(preco).toFixed(2);
+
+            currentRow.remove();
+        }
+
+        // Função para excluir um aluguel
+        function excluirAluguel(row) {
+            var currentRow = row.parentNode.parentNode;
+            currentRow.remove();
+        }
+
+        // Adicionar evento de submit para adicionar aluguel
+        document.getElementById("aluguelForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            adicionarAluguel();
+            this.reset();
+        });
+    </script>
+
+</body>
+</html>
